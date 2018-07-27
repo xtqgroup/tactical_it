@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="product_brand_search_form_view" model="ir.ui.view">
+        <field name="name">product.brand.search.form</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <search string="Product Brand">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <act_window
+        id="action_open_brand_products"
+        name="Brand Products"
+        res_model="product.template"
+        view_type="form"
+        view_mode="kanban,form,tree"/>
+
+    <act_window
+        id="action_open_single_product_brand"
+        name="Product Brand"
+        res_model="product.brand"
+        view_type="form"
+        view_mode="kanban,form,tree"
+        target="current"
+        domain="[('product_ids', 'in', active_id)]"/>
+
+    <record id="view_product_brand_form" model="ir.ui.view">
+        <field name="name">product.brand.form</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_open_brand_products)d"
+                            type="action"
+                            class="oe_stat_button"
+                            icon="fa-cubes">
+                            <field name="products_count" widget="statinfo" string="Products"/>
+                        </button>
+                    </div>
+                    <field name="logo" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                            <label for="name" string="Brand Name" class="oe_edit_only"/>
+                            <h1><field name="name"/></h1>
+                    </div>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_brand_tree" model="ir.ui.view">
+        <field name="name">product.brand.tree</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <tree string="product.brand">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_brand_kanban" model="ir.ui.view">
+        <field name="name">product.brand.kanban</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="logo"/>
+                <field name="products_count"/>
+                <field name="description"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_vignette oe_semantic_html_override">
+                            <a type="open">
+                                <img t-att-src="kanban_image('product.brand', 'logo', record.id.raw_value)"
+                                     class="oe_kanban_image"/>
+                            </a>
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open">
+                                        <field name="name"/>
+                                    </a>
+                                </h4>
+                                <div>
+                                    <a name="%(product_brand.action_open_brand_products)d"
+                                       type="action">
+                                        <t t-esc="record.products_count.value"/> Products
+                                    </a>
+                                </div>
+                                <span>
+                                    <t t-esc="record.description.value.substr(0,200)"/>
+                                    <t t-if="record.description.value.length > 200">
+                                        <a type="open"><b>...</b></a>
+                                    </t>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_product_template_search_brand" model="ir.ui.view">
+        <field name="name">product.template.search.brand</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="product_brand_id"/>
+                <filter string="Brand" name="groupby_brand" domain="[]"
+                        context="{'group_by' : 'product_brand_id'}"/>
+                <separator/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_template_form_brand_add" model="ir.ui.view">
+        <field name="name">product.template.product.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']" position='after'>
+                <page string='Detalles de Producto'>
+                    <field name="product_variant_ids" string="Variantes de Productos"/>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='product_variant_ids']" position="attributes">
+                <attribute name="context">{'product_variant_ids': product_variant_ids}</attribute>
+            </xpath>
+            <field name="categ_id" position="after">
+                <!--<field name="code_category" string="Codigo Categoría"/>-->
+                <field name="code_final" string="Codigo Interno Integral"/>
+            </field>
+            <field name="sale_ok" position="before">
+                <field name="product_brand_id" placeholder="Marca"/><div/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="product_template_tree_brand_add" model="ir.ui.view">
+        <field name="name">product.template.tree.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <!--<field name="code_category" string="Codigo Categoría"/>
+                <field name="code_sequence" string="Codigo Secuencia"/>-->
+                <field name="code_final" string="Referencia Interno" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_supplier_form_brand_add" model="ir.ui.view">
+        <field name="name">product.template.supplier.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="purchase.view_product_supplier_inherit" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='seller_ids']" position="attributes">
+                <attribute name="context">{'seller_ids': seller_ids}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_default_code_only_form_view" model="ir.ui.view">
+        <field name="name">product.template.code.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position='replace'>
+                <field name="default_code" string="Referencia Interna"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_kanban_brand" model="ir.ui.view">
+        <field name="name">product kanban view: add brand</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_kanban_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]/strong[1]" position="after">
+                <div>
+                    <a t-if="record.product_brand_id" type="action"
+                       name="%(action_open_single_product_brand)d">
+                        <field name="product_brand_id"/>
+                    </a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_variant_form_brand" model="ir.ui.view">
+        <field name="name">Product Product Inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="sequence" string="Secuencia"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_product_template_tree_brand" model="ir.ui.view">
+        <field name="name">product tree view-add brand</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position='replace'>
+                <tree string="Productos y Servicios">
+                    <field name="default_code" string="Código Interno"/>
+                    <field name="name" string="Nombre"/>
+                    <!--<field name="product_brand_id" string="Marca" widget="many2many_tags"/>-->
+                    <!--<field name="seller_ids" string="Proveedores" widget="many2many_tags"/>--> 
+                    <field name="categ_id" string="Categoría Interna"/>
+                    <!--<field name="product_brand_model_id"/>-->
+                </tree>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_variant_tree_brand" model="ir.ui.view">
+        <field name="name">Product Product Tree</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_product_brand">
+        <field name="name">Brand</field>
+        <field name="res_model">product.brand</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+    <menuitem
+        name="Product Brands"
+        id="menu_product_brand"
+        action="action_product_brand"
+        parent="sale.prod_config_main"/>
+
+    <record id="product_brand_search_form_view" model="ir.ui.view">
+        <field name="name">product.brand.search.form</field>
+        <field name="model">product.brand</field>
+        <field name="arch" type="xml">
+            <search string="Product Brand">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Modelo -->
+
+    <record id="product_brand_model_search_view" model="ir.ui.view">
+        <field name="name">product.brand.model.search</field>
+        <field name="model">product.brand.model</field>
+        <field name="arch" type="xml">
+            <search string="Product Model">
+                <field name="name"/>
+                <field name="brand_id"/>
+            </search>
+        </field>
+    </record>
+
+    <act_window
+        id="action_open_brand_model_products"
+        name="Model Products"
+        res_model="product.template"
+        view_type="form"
+        view_mode="kanban,form,tree"
+        domain="[('product_brand_model_id', '=', active_id)]"/>
+   
+    <act_window
+        id="action_open_single_product_brand_model"
+        name="Product Model"
+        res_model="product.brand.model"
+        view_type="form"
+        view_mode="kanban,form,tree"
+        target="current"
+        domain="[('product_ids', 'in', active_id)]"/>
+
+    <record id="view_product_brand_model_form" model="ir.ui.view">
+        <field name="name">product.brand.model.form</field>
+        <field name="model">product.brand.model</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre de Modelo" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="brand_id" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_brand_model_tree" model="ir.ui.view">
+        <field name="name">product.brand.model.tree</field>
+        <field name="model">product.brand.model</field>
+        <field name="arch" type="xml">
+            <tree string="product.brand.model">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="brand_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_product_brand_kanban" model="ir.ui.view">
+        <field name="name">product.brand.model.kanban</field>
+        <field name="model">product.brand.model</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="description"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_vignette oe_semantic_html_override">
+                            <a type="open">
+                                <img t-att-src="kanban_image('product.brand.model', record.id.raw_value)"
+                                     class="oe_kanban_image"/>
+                            </a>
+                            <div class="oe_kanban_details">
+                                <h4>
+                                    <a type="open">
+                                        <field name="name"/>
+                                    </a>
+                                </h4>
+                                <span>
+                                    <t t-esc="record.description.value.substr(0,200)"/>
+                                    <t t-if="record.description.value.length > 200">
+                                        <a type="open"><b>...</b></a>
+                                    </t>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_product_brand_model">
+        <field name="name">Model</field>
+        <field name="res_model">product.brand.model</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,form,tree</field>
+    </record>
+
+    <menuitem
+        name="Product Brands"
+        id="menu_product_brand_model"
+        action="action_product_brand_model"
+        parent="sale.prod_config_main"/>
+    
+    <record id="product_category_code_add_form" model="ir.ui.view">
+        <field name="name">product.category.code.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="code_category" string="Código"/>
+                <field name="code_final" string="Codigo Final"/>
+            </field>
+            <xpath expr="//sheet/group" position="after">
+                <notebook>
+                    <page string="Lista de Productos">
+                        <field name="product_template_ids" string="Lista de Productos">
+                            <tree>
+                                <field name="code_sequence" string="Secuencia"/>
+                                <field name="code_final" string="Codigo Interno"/>
+                                <field name="name" string="Nombre de Producto"/>
+                                <field name="product_brand_id" string="Marca"/>
+                                <field name="categ_id" string="Categoría"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Categorías Hijo">
+                        <field name="child_id" string="Categorías Hijo">
+                            <tree default_order='code_category'>
+                                <field name="code_final" string="Codigo Final"/>
+                                <field name="code_category" string="Codigo Secuencial"/>
+                                <field name="name" string="Nombre"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+            <xpath expr="//field[@name='product_template_ids']" position="attributes">
+                <attribute name="context">{'product_template_ids': product_template_ids }</attribute>
+            </xpath>
+            <xpath expr="//field[@name='child_id']" position="attributes">
+                <attribute name="context">{'child_id': child_id}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_category_code_add_list" model="ir.ui.view">
+        <field name="name">product.category.code.list</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_list_view"/>
+        <field name="arch" type="xml">
+            <field name="display_name" position="before">
+                <field name="code_final" string="Código Categoría"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_supplierinfo_brand_add_form" model="ir.ui.view">
+        <field name="name">product.supplierinfo.brand.form</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="replace">
+                <field name="name" string="Proveedor"/>
+            </field>
+            <field name="product_name" position="before">
+                <!--<field name="product_brand_id" string="Marca"/>
+                <field name="product_brand_name" string="Nombre Marca" invisible ="1"/>-->
+                <field name="product_tmpl_id" string="Producto"/>
+                <field name="code_product_id" string="Codigo Interno Producto"/>
+                <!--<field name="intern_code" string="Codigo Interno"/>-->
+            </field>
+            <xpath expr="/form/group/group/label[@for='delay']" position="replace">
+                <field name="delay" string="Tiempo Entrega Referecial"/>
+                <!--<field name="product_categ_id" string="Categoria Interna"/>
+                <field name="product_type" string="Tipo de Producto"/>-->
+            </xpath>
+            <xpath expr="/form/group/group/div" position="replace">
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_supplierinfo_brand_add_tree" model="ir.ui.view">
+        <field name="name">product.supplierinfo.brand.tree</field>
+        <field name="model">product.supplierinfo</field>
+        <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="/tree" position="replace">
+                <tree string="Productos Marca">
+                    <!--<field name="intern_code" string="Codigo Interno"/>-->
+                    <!--<field name="product_code" string="Codigo Producto"/>
+                    <field name="product_id" string="Nombre"/>-->
+                    <!--<field name="product_brand_id" string="Marca"/>-->
+                    <field name="name" string="Proveedor"/>
+                    <field name="product_name" string="Nombre Producto Proveedor"/>
+                    <field name="product_code" string="Codigo Producto Proveedor"/>
+                    <field name="delay" string="Tiempo Entrega Referencial"/>
+                    <!--<field name="product_categ_id" string="Categoria Interna"/>-->
+                    <field name="price" string="Precio Unitario"/>
+                    <!--<field name="product_type" string="Tipo de Producto"/>-->
+                </tree>
+            </xpath>
+            <!--</field>-->
+        </field>
+    </record>
+
+    <!--<record id="product_supplierinfo_action" model="ir.actions.act_window">
+        <field name="name">Productos por Marca</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.supplierinfo</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" eval="False"/> 
+        <field name="view_id" ref="product_supplierinfo_brand_add_tree"/>
+    </record>
+
+    <menuitem id="product_supplierinfo_menu" name="Productos por Marca"
+            parent="purchase_discount.menu_purchase_data_master"
+            action="product_supplierinfo_action" sequence="15"/>-->
+            <!--product.product_supplierinfo_type_action-->
+</odoo>

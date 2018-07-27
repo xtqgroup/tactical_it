@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="after">
+                <field name="number" string="nbr"/>
+            </field>
+        </field>
+    </record>
+    <record id="invoice_supplier_form" model="ir.ui.view">
+        <field name="name">account.invoice.supplier.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="arch" type="xml">
+            <field name="date_due" position="after">
+                <field name="id_pa"/>
+                <field name="code_pa"/>
+            </field>
+        </field>
+    </record>
+    <record id="res_partner_bank_form" model="ir.ui.view">
+        <field name="name">res.partner.bank.form</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="code_cci"/>
+            </field>
+        </field>
+    </record>
+    <record id="res_partner_bank_tree" model="ir.ui.view">
+        <field name="name">res.partner.bank.tree</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_tree"/>
+        <field name="arch" type="xml">
+            <field name="bank_name" position="before">
+                <field name="code_cci"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="bi_project_task_form_inherit_field_sequence_name" model="ir.ui.view">
+            <field name="name">project.task.form.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="replace"> 
+                    <!-- <xpath expr="//form/notebook/page[@name='extra_info']/group/group/field[@name='parent_id']" position="replace">-->
+                    <field name="parent_id" domain="[('project_id', '=', project_id)]"/> <!--groups="project.group_subtask_project"-->
+                    <!--</xpath>-->
+                </field>
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <group>
+                        <group>
+                            <!--<field name="task_level" string="Nivel de Tarea"/>-->
+                        </group>
+                        <group>
+                            <field name="sequence_name" string="Código Relativo"/>
+                            <field name="complete_name" string="Código Integral Tarea"/>
+                        </group>
+                    </group>
+                </xpath>
+                <field name="child_ids" position="replace">
+                </field>
+                <xpath expr="//page[@name='description_page']" position="after">
+                    <page name="child_page" string="Sub-Tareas">
+                        <field name="child_ids"/>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']" position="attributes">
+                    <attribute name="context">{'child_ids': child_ids}</attribute>
+                </xpath>
+                <xpath expr="//div[@class='oe_button_box']/button[@name='action_subtask']" position="replace">
+                    <button name="action_subtask" type="object" class="oe_stat_button" icon="fa-tasks" invisible="1" context="{'project_id': subtask_project_id, 'name': name, 'partner_id': partner_id}" groups="project.group_subtask_project">
+                        <field string="Sub-tasks" name="subtask_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="bi_project_task_tree_inherit_field_sequence_name" model="ir.ui.view">
+            <field name="name">project.task.tree.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="complete_name" string="Codigo"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="project_task_kanban_inherit">
+            <field name="name">project.task.kanban.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_record_headings']" position="inside"> 
+                <!--/kanban/templates/t/div/div/div/strong/field[@name='name']" position="before"/-->
+                    <strong class="o_kanban_record_title"><field name="complete_name"/></strong><br/>
+                </xpath>
+            </field>
+        </record>
+
+<!-- PARTIDAS APUS -->
+
+        <record id="bi_project_apu_form_inherit_field_sequence_name" model="ir.ui.view">
+            <field name="name">project.apu.form.inherit</field>
+            <field name="model">project.apu</field>
+            <field name="inherit_id" ref="project_task_product.view_apu_form2"/>
+            <field name="arch" type="xml">
+                <field name="parent_id" position="replace"> 
+                    <field name="parent_id" domain="[('project_id', '=', project_id)]"/> <!--groups="project.group_subtask_project"-->
+                </field>
+                <xpath expr="//page[@name='description_page']" position="after">
+                    <page name="child_page" string="Sub-Partidas">
+                        <field name="child_ids"/>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']" position="attributes">
+                    <attribute name="context">{'child_ids': child_ids}</attribute>
+                </xpath>
+                <xpath expr="//div[@class='oe_title']" position="after">
+                    <group>
+                        <group>
+                            <field name="apu_level" string="Nivel de Partida"/>
+                        </group>
+                        <group>
+                            <field name="sequence_name" string="Código Relativo"/>
+                            <field name="complete_name" string="Código Integral Partida"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record> 
+
+        <record id="bi_project_task_apu_inherit_field_sequence_name" model="ir.ui.view">
+            <field name="name">project.apu.tree.inherit</field>
+            <field name="model">project.apu</field>
+            <field name="inherit_id" ref="project_task_product.view_apu_tree2"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="complete_name" string="Codigo"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="project_apu_kanban_inherit">
+            <field name="name">project.apu.kanban.inherit</field>
+            <field name="model">project.apu</field>
+            <field name="inherit_id" ref="project_task_product.view_apu_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_record_headings']" position="inside"> 
+                    <strong class="o_kanban_record_title"><field name="complete_name"/></strong><br/>
+                </xpath>
+            </field>
+        </record>
+    
+
+    </data>
+</odoo>

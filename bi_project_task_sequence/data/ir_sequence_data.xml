@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--<record id="seq_project_task" model="ir.sequence">
+            <field name="name">Tarea Nivel 1</field>
+            <field name="code">project.tasks</field>
+            <field name="prefix">1.</field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task2" model="ir.sequence">
+            <field name="name">Tarea Nivel 2</field>
+            <field name="code">project.tasks2</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task3" model="ir.sequence">
+            <field name="name">Tarea Nivel 3</field>
+            <field name="code">project.tasks3</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task4" model="ir.sequence">
+            <field name="name">Tarea Nivel 4</field>
+            <field name="code">project.tasks4</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task5" model="ir.sequence">
+            <field name="name">Tarea Nivel 5</field>
+            <field name="code">project.tasks5</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task6" model="ir.sequence">
+            <field name="name">Tarea Nivel 6</field>
+            <field name="code">project.tasks6</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_task7" model="ir.sequence">
+            <field name="name">Tarea Nivel 7</field>
+            <field name="code">project.tasks7</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu" model="ir.sequence">
+            <field name="name">Partida Nivel 1</field>
+            <field name="code">project.apus</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu2" model="ir.sequence">
+            <field name="name">Partida Nivel 2</field>
+            <field name="code">project.apus2</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu3" model="ir.sequence">
+            <field name="name">Partida Nivel 3</field>
+            <field name="code">project.apus3</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu4" model="ir.sequence">
+            <field name="name">Partida Nivel 4</field>
+            <field name="code">project.apus4</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu5" model="ir.sequence">
+            <field name="name">Partida Nivel 5</field>
+            <field name="code">project.apus5</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu6" model="ir.sequence">
+            <field name="name">Partida Nivel 6</field>
+            <field name="code">project.apus6</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_project_apu7" model="ir.sequence">
+            <field name="name">Partida Nivel 7</field>
+            <field name="code">project.apus7</field>
+            <field name="prefix"></field>
+            <field name="padding">2</field>
+            <field name="company_id" eval="False"/>
+        </record>-->
+
+    </data>
+</odoo>

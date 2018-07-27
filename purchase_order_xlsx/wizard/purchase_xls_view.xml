@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="purchase_excel_view" model="ir.ui.view">
+		<field name="name">wizard.reports</field>
+		<field name="model">wizard.reports</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Order">
+			<p class="oe_grey">
+			You want to Print Purchase Excel Report?
+			</p>			  
+				<footer>
+					<button string="Print Excel Report" class="btn-primary" name="action_purchase_report" type="object" />
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>						
+		</field>
+	</record>
+	<record id="purchase_excel_views" model="ir.ui.view">
+		<field name="name">purchase.report.out</field>
+		<field name="model">purchase.report.out</field>
+		<field name="arch" type="xml">
+			<form string="Export Purchase Orders">
+				<group>
+					<field name="file_name" filename="purchase_data" />
+					<field name="purchase_data" invisible="1" />
+					<!--<field name="file_names" filename="purchase_work" />
+					<field name="purchase_work" invisible="1" />-->
+				</group>
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>	
+	<act_window id="action_purchase_excel" key2="client_action_multi"
+		name="Purchase Order Excel Report " res_model="wizard.reports" src_model="purchase.order"
+		view_mode="form" target="new" />
+
+	<record id="purchase_excel_view2" model="ir.ui.view">
+		<field name="name">Reporte Excel Planificado vs Comprometido</field>
+		<field name="model">wizard.line.reports</field>
+		<field name="arch" type="xml">
+			<form>
+				<group>
+					<group>
+						<field name="all_check_project" widget="checkbox"/>
+                    </group>
+					<group>
+						<separator string="Selección de Proyecto" attrs="{'invisible':[('all_check_project', '=', True)]}"/>
+						<field name="id_project" string= "Selección de Proyecto" attrs="{'invisible':[('all_check_project', '=', True)]}"/>
+						<field name="code_project" string="Código de Proyecto" attrs="{'invisible':[('all_check_project', '=', True)]}"/>
+					</group>
+				</group>
+				<group>
+					<group>
+                        <field name="all_check_adq" widget="checkbox"/>
+                    </group>
+					<group>
+						<separator string="Selección de Adquisición" attrs="{'invisible':[('all_check_adq', '=', True)]}"/>
+						<field name="adq_type" string= "Tipo de Adquisición" attrs="{'invisible':[('all_check_adq', '=', True)]}"/>
+					</group>
+				</group>
+				<group>
+					<group>
+                        <field name="all_check_date" widget="checkbox"/>
+                    </group>
+					<group>
+						<separator string="Rango de Fechas de Creación de OC" attrs="{'invisible':[('all_check_date', '=', True)]}"/>
+						<field name="fe_inicio" string= "Inicio" attrs="{'invisible':[('all_check_date', '=', True)]}"/>
+						<field name="fe_final" string= "Fin" attrs="{'invisible':[('all_check_date', '=', True)]}"/>
+					</group>
+				</group>
+				<footer>
+					<button string="Reporte Excel" class="btn-primary" name="action_purchase_report" type="object" />
+					<button string="Cancelar" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>						
+		</field>
+	</record>
+	<record id="purchase_excel_views2" model="ir.ui.view">
+		<field name="name">purchase.line.report.out</field>
+		<field name="model">purchase.line.report.out</field>
+		<field name="arch" type="xml">
+			<form string="Exportar Reporte Comparativo">
+				<group>
+					<field name="file_name" filename="purchase_data"/>
+					<field name="purchase_data" invisible="1" />
+					<!--<field name="file_names" filename="purchase_work" />
+					<field name="purchase_work" invisible="1" />-->
+				</group>
+				<footer>
+					<button string="Cancelar" class="btn-primary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+	 <record id="wizard_line_action" model="ir.actions.act_window">
+        <field name="name">Comparativo</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.line.reports</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!--<field name="search_view_id" eval="False"/> -->
+    </record>
+    <menuitem
+        id="menu_wizard_lines"
+        sequence="10"
+        parent="sprogroup_purchase_request.menu_purchase_monitoring"
+        action="wizard_line_action"/>	
+	<!--<act_window id="action_purchase_excel" key2="client_action_multi"
+		name="Reporte Excel Comparativo" res_model="wizard.line.reports" src_model="purchase.order.line"
+		view_mode="form" target="new"/>-->
+</odoo>

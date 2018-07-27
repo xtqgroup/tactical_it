@@ -242,7 +242,11 @@
       <xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
         <field name="catalog" string="Catálogos"/>
         <field name="eva" string="Resultado Evaluación"/>
+<<<<<<< HEAD
         <!--<field name="date_evaluation" string="Ultima Fecha Evaluacion"/>-->
+=======
+        <field name="date_evaluation" string="Ultima Fecha Evaluacion"/>
+>>>>>>> remotes/origin/beta_v11
         <!--<field name="status_supplier" string="Estado de Proveedor"/>-->
       </xpath>
     </field>

@@ -1,0 +1,551 @@
+<?xml version="1.0"?>
+<!-- Copyright 2016 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+
+        <record model="ir.ui.view" id="view_sprogroup_purchase_request_form1">
+            <field name="name">sprogroup.purchase.request.form</field>
+            <field name="model">sprogroup.purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request" version="7.0">
+                <header>
+                    <button name="button_draft"
+                            states="rejected,done"
+                            string="Reiniciar a Planificado"
+                            type="object"
+                            />
+                    <button name="button_done"
+                            states="draft"
+                            string="Solicitado"
+                            type="object"
+                            class="oe_highlight"
+                            />
+                    <button name="button_rejected"
+                            string="Cancelar"
+                            type="object"
+                            attrs="{'invisible': [('can_reject', '=', False)]}"
+                            />
+                    <button string="Generar SdP" states="done" name="make_purchase_quotation" type="object"
+                            context="{'default_product_ids': line_ids}"
+                            />
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,done"
+                           statusbar_colors='{"manager_approved":"blue"}'/>
+                </header>
+                <sheet>
+                    <field name="is_editable" invisible="1"/>
+                    <div>
+                        <label for="code" class="oe_inline"/>
+                    </div>
+                    <h1>
+                        <field name="code" class="oe_inline"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="can_leader_approved" invisible="1"/>
+                            <field name="can_manager_approved" invisible="1"/>
+                            <field name="can_reject" invisible="1"/>
+                            <field name="name" string="Título"/>
+                            <field name="assigned_to" attrs="{'readonly': [('is_editable','=', True)]}" invisible="1"/>
+                            <field name="currency_id"/>
+                        </group>
+                        <group>
+                            <field name="id_project"/> 
+                            <field name="code_project"/>
+                            <field name="adq_type" string="Tipo de Adquisición"/>
+                            <!--<field name="component_project"/>--> 
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="ids_products" string="Linea de Bienes"> <!--attrs="{'invisible': ['|', ('adq_type', '=', ('Servicio')), ('adq_type', '=', ('Contrato'))]}"-->
+                            <field name="line_ids" eval="False"> <!-- attrs="{'invisible': ['|', ('adq_type', '=', ('Servicio')), ('adq_type', '=', ('Contrato'))]}"--> 
+                                <tree> <!-- attrs="{'invisible': ['|', ('adq_type', '=', ('Servicio')), ('adq_type', '=', ('Contrato'))]}"--> 
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="adq_type" invisible = "1"/>
+                                    <field name="unit_price_ref" string= "Precio Unitario"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" groups="product.group_uom" string="Unidad de Medida"/>
+                                    <field name="subtotal" string="Subtotal"/>
+                                    <field name="forecast_payment" string="Pago Proyectado"/>
+                                    <field name="supplier_id" invisible="1"/>
+                                    <field name="product_supplier_id" domain="[('name', '=', supplier_id)]"/> <!--('product_tmpl_id', '=', name), -->
+                                    <field name="product_code" string="Codigo Producto"/>
+                                    <field name="p_date_request"/>
+                                    <field name="p_date_order"/>
+                                    <field name="p_start_up"/>
+                                    <field name="date_required"/>
+                                    <field name="p_date_payment"/>
+                                    <field name="task_ids" string="EDT"/>
+                                    <field name="apu_ids" string="Partida"/>
+                                    <field name="cancelled" invisible="1"/>
+                                    <field name="is_editable" invisible="1"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="is_editable" invisible="1"/>
+                                                <field name="adq_type"/>
+                                                <field name="product_id"/>
+                                                <field name="code_product_id" invisible="1"/>
+                                                <!--<field name="product_brand_id" invisible="1"/>-->
+                                                <field name="name"/>
+                                                <field name="unit_price_ref"/>
+                                                <label for="product_qty"/>
+                                                <div>
+                                                    <field name="product_qty"
+                                                           class="oe_inline" string="Cantidad"/>
+                                                    <field name="product_uom_id"
+                                                           groups="product.group_uom"
+                                                           class="oe_inline"/>
+                                                </div>
+                                                <field name="subtotal"/>
+                                                <field name="forecast_payment"/>
+                                                <field name="p_start_up"/>
+                                                <field name="time_obra"/>
+                                                <field name="date_required"/>
+                                                <field name="code_project"/>
+                                                <field name="id_project"/>
+                                            </group>
+                                            <group>
+                                                <field name="delay_oc"/>
+                                                <field name="p_date_request"/>
+                                                <field name="p_delay"/>
+                                                <field name="p_date_order"/>
+                                                <field name="p_payment_condition"/>
+                                                <field name="p_date_payment"/>
+                                                <field name="quotation_id"/>
+                                                <field name="quotation_link"/>
+                                                <field name="cost_type" string="Tipo de Costo"/>
+                                                <field name="task_ids" string="EDT" domain="[('project_id','=', id_project)]" readonly="False" is_editable="True"/>
+                                                <field name="apu_ids" string="Partida" domain="[('project_id','=', id_project)]" readonly="False" is_editable="True"/>
+                                                <field name="supplier_id" string="Proveedor Planificado" readonly="1"/>
+                                                <field name="product_supplier_id" domain="[('name', '=', supplier_id), ('code_product_id', '=', code_product_id)]"/> <!--('product_tmpl_id', '=', name), -->
+                                                <field name="product_code" string="Codigo Producto"/>
+                                                <field name="name_product_supplier_id" string="Nombre Producto Proveedor"/>
+                                                <field name="code_product_supplier_id" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <separator string="Especificaciones"/>
+                                            <newline/>
+                                            <field name="specifications" nolabel="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <!--<page name="ids_products" string="Linea de Servicio" attrs="{'invisible': [('adq_type', '=', ('Bienes'))]}">
+                            <field name="line_ids" attrs="{'invisible': [('adq_type', '=', ('Bienes'))]}"> 
+                                <tree attrs="{'invisible': [('adq_type', '=', ('Bienes'))]}"> 
+                                    <field name="product_id"/>
+                                    <field name="adq_type" invisible = "1"/>
+                                    <field name="product_qty" string="% Valorización" widget="percentage"/>
+                                    <field name="unit_price_ref" string= "Monto Inicial"/>
+                                    <field name="subtotal" string="Valorizacion"/>
+                                    <field name="forecast_payment" string="Pago Proyectado"/>
+                                    <field name="date_required" string="Fecha Valorización"/>
+                                    <field name="p_date_payment" string="Fecha de Pago"/>
+                                    <field name="task_ids" string="EDT"/>
+                                    <field name="apu_ids" string="Partida"/>
+                                    <field name="cancelled" invisible="1"/>
+                                    <field name="is_editable" invisible="1"/>
+                                </tree>
+                                <form attrs="{'invisible': [('adq_type', '=', ('Bienes'))]}">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="is_editable" invisible="1"/>
+                                                <field name="adq_type"/>
+                                                <field name="product_id"/>
+                                                <field name="name" string="Descripción"/>
+                                                <field name="unit_price_ref" string="Monto Inicial"/>
+                                                <field name="product_qty" string="%Valorización"/>
+                                                <field name="subtotal" string="Valorización"/>
+                                                <field name="forecast_payment" string="Pago Proyectado"/>
+                                                <field name="date_required" string="Fecha Valorización"/>
+                                                <field name="code_project"/>
+                                                <field name="id_project"/>
+                                            </group>
+                                            <group>
+                                                <field name="p_payment_condition"/>
+                                                <field name="p_date_payment"/>
+                                                <field name="quotation_id"/>
+                                                <field name="quotation_link"/>
+                                                <field name="cost_type" string="Tipo de Costo"/>
+                                                <field name="task_ids" string="EDT" domain="[('project_id','=', id_project)]" readonly="False" is_editable="True"/>
+                                                <field name="apu_ids" string="Partida" domain="[('project_id','=', id_project)]" readonly="False" is_editable="True"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <separator string="Especificaciones"/>
+                                            <newline/>
+                                            <field name="specifications" nolabel="1" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>--> <!--attrs="{'invisible': ['|', ('adq_type', '=', ('Servicio')), ('adq_type', '=', ('Contrato'))]}"-->
+                        <page string="Ordenes Relacionados">
+                            <separator string="Detallado"/>
+                            <field name="id_purchase_order" string="" readonly="1"/>
+                        </page>
+                        <page string="Información de Proveedor">
+                            <group>
+                                <group>
+                                    <field name="buyer" string="Comprador"/>
+                                    <field name="supplier_id" string="Proveedor"/>
+                                    <field name="location_supplier" string="Lugar Entrega Proveedor"/>
+                                    <field name="status_supplier" string="Status Proveedor"/>
+                                </group>
+                                <group>
+                                    <!--<field name="adq_quotation" string="Cotización"/>-->
+                                    <field name="create_date" string="Fecha Creación Planificación" readonly="1"/>
+                                    <field name="create_uid" string="Usuario Responsable" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Opciones de Bienes">
+                            <group>
+                                <field name="delay_oc" string="Lead Time de emision de OC"/>
+                                <field name="criticality_adq" string="Criticidad ADQ"/>
+                            </group>
+                        </page>
+                        <page string="Opciones de Servicio">
+                            <group>
+                                <group>
+                                    <separator string="Adelanto"/>
+                                    <field name="advance" string="Monto" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="advance_percentage" string="Porcentaje" widget="percentage"/>
+                                    <field name="advance_date" string="Fecha"/>
+                                </group>
+                                <group>
+                                    <separator string="Garantía"/>
+                                    <field name="warranty" string="Monto" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="warranty_percentage" string="Porcentaje" widget="percentage"/>
+                                    <field name="warranty_date" string="Fecha"/>
+                                </group>
+                                <group>
+                                    <separator string="Fechas"/>
+                                    <field name="date_start" string="Inicio"/>
+                                    <field name="end_start" string="Entrega"/>
+                                </group>
+                                <group>
+                                    <separator string="Monto Inicial"/>
+                                    <field name="service_amount" string="Monto" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                  <field name="message_follower_ids" widget="mail_followers"/>
+                  <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sprogroup_purchase_request_tree">
+            <field name="name">sprogroup.purchase.request.tree</field>
+            <field name="model">sprogroup.purchase.request</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_needaction==True"
+                      decoration-info="state in ('draft','to_approve')"
+                      decoration-muted="state in ('rejected')"
+                      string="Purchase Request">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="code_project"/>
+                    <field name="adq_type" string="Tipo de Adquisición"/>
+                    <field name="requested_by"/>
+                    <field name="state"/>
+                </tree>
+          </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sprogroup_purchase_request_kanban">
+            <field name="name">sprogroup.purchase.request.kanban</field>
+            <field name="model">sprogroup.purchase.request</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile">
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="supplier_id"/>
+                    <field name="adq_type"/>
+                    <!--<field name="amount_total"/>-->
+                    <field name="state"/>
+                    <field name="code_project"/>
+                    <field name="id_purchase_order"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_record_top mb16">
+                                    <div class="o_kanban_record_headings mt4">
+                                        <strong class="o_kanban_record_title"><span><t t-esc="record.name.value"/></span></strong>
+                                        <strong class="o_kanban_record_title"><span><t t-esc="record.supplier_id.value"/></span></strong>
+                                    </div>
+                                    <strong><field name="code_project"/></strong>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span><t t-esc="record.code.value"/><t t-esc="record.adq_type.value"/></span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <!--<field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'done': 'success', 'manager_approved': 'success', 'leader_approved': 'warning'}}"/>-->
+                                        <field name="id_purchase_order" widget="many2many_tags"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_sprogroup_purchase_request_pivot">
+            <field name="name">sprogroup.purchase.request.pivot</field>
+            <field name="model">sprogroup.purchase.request</field>
+            <field name="arch" type="xml">
+                <pivot string="Purchase Request">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="code"/>
+                    <field name="name"/>
+                    <field name="code_project"/>
+                    <field name="adq_type" string="Tipo de Adquisición"/>
+                    <field name="requested_by"/>
+                    <field name="state"/>
+                </pivot>
+          </field>
+        </record>
+
+        <record id="view_sprogroup_purchase_request_search" model="ir.ui.view">
+            <field name="name">sprogroup.purchase.request.list.select</field>
+            <field name="model">sprogroup.purchase.request</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Request">
+                    <!--<field name="name" string="Purchase Request"/>
+                    <separator/>
+                    <field name="state"/>-->
+                    <filter name="unassigned" string="Unassigned"
+                            domain="[('assigned_to','=', False)]"
+                            help="Unassigned Request"/>
+                    <filter name="state_draft" string="Draft"
+                            domain="[('state','=','draft')]"
+                            help="Request is to be approved"/>
+                    <filter name="state_to_approve" string="To Approve"
+                            domain="[('state','=','to_approve')]"
+                            help="Request is to be approved"/>
+                    <filter name="state_approved" string="Leader Approved"
+                            domain="[('state','=','leader_approved')]"
+                            help="Request is approved by leader"/>
+                    <filter name="state_approved" string="Manager Approved"
+                            domain="[('state','=','manager_approved')]"
+                            help="Request is approved"/>
+                    <filter name="state_rejected" string="Rejected"
+                            domain="[('state','=','rejected')]"
+                            help="Request is rejected"/>
+                    <filter name="state_done" string="Done"
+                            domain="[('state','=','done')]"
+                            help="Request is done"/>
+                    <filter string="Unread Messages"
+                            name="message_needaction"
+                            domain="[('message_needaction','=',True)]"/>
+                    <filter domain="[('assigned_to','=', uid)]"
+                            help="Assigned to me"/>
+                    <filter domain="[('requested_by','=', uid)]"
+                            help="My requests"/>
+                    <field name="requested_by" />
+                    <field name="assigned_to" />
+                    <group expand="0" string="Group By...">
+                        <filter string="Requested by" icon="terp-personal"
+                                domain="[]"
+                                context="{'group_by':'requested_by'}"/>
+                        <filter string="Assigned to" icon="terp-personal"
+                                domain="[]"
+                                context="{'group_by':'assigned_to'}"/>
+                        <filter string="Source" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'origin'}"/>
+                        <filter string="Start Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="sprogroup_purchase_request_form_action1">
+            <field name="name">Planificación</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sprogroup.purchase.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban,pivot</field>
+            <field name="context">{"search_default_requested_by":uid}</field>
+            <field name="search_view_id" ref="view_sprogroup_purchase_request_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click en Crear para comenzar con una Planificación de Adquisición
+              </p>
+            </field>
+        </record>
+
+        <act_window
+            id="action_sprogroup_purchase_request_line_product_tree"
+            name="Sprogroup Purchase Requests"
+            res_model="sprogroup.purchase.request.line"
+            src_model="product.product"/>
+        <menuitem
+            id="menu_sprogroup_purchase_request_act"
+            sequence="-10"
+            parent="purchase.menu_procurement_management"
+            action="sprogroup_purchase_request_form_action1"
+            />    
+        
+  
+    <!-- LO QUE APARECE EN EL MENU -->
+    <record model="ir.ui.view" id="view_sprogroup_purchase_request_lines_form">
+        <field name="name">sprogroup.purchase.request.lines.form</field>
+        <field name="model">sprogroup.purchase.request.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="is_editable" invisible="1"/>
+                        <field name="adq_type"/>
+                        <field name="product_id"/>
+                        <field name="name" string="Descripción"/>
+                        <field name="unit_price_ref" string="Monto Inicial"/>
+                        <field name="product_qty" string="%Valorización"/> <!--attrs="{'invisible': [('adq_type', '=', ('Bienes'))]}"--> 
+                        <!--<label for="product_qty"/>
+                        <div>
+                            <field name="product_qty"
+                                   class="oe_inline" string="% Valorización"/>
+                            <field name="product_uom_id"
+                                   groups="product.group_uom"
+                                   class="oe_inline"/>
+                        </div>-->
+                        <field name="subtotal" string="Valorización"/>
+                        <field name="forecast_payment" string="Pago Proyectado"/>
+                        <field name="date_required" string="Fecha Valorización"/>
+                        <field name="code_project"/>
+                        <field name="id_project"/>
+                    </group>
+                    <group>
+                        <!--<field name="delay_oc"/>-->
+                        <!--<field name="p_date_request"/>
+                        <field name="p_delay"/>
+                        <field name="p_date_order"/>-->
+                        <field name="p_payment_condition"/>
+                        <field name="p_date_payment"/>
+                        <field name="quotation_id"/>
+                        <field name="quotation_link"/>
+                        <field name="cost_type" string="Tipo de Costo"/>
+                        <field name="task_ids" string="EDT" readonly="False" is_editable="True"/>
+                        <field name="apu_ids" string="Partida" readonly="False" is_editable="True"/>
+                    </group>
+                </group>
+                <group>
+                    <separator string="Especificaciones"/>
+                    <newline/>
+                    <field name="specifications" nolabel="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_sprogroup_purchase_request_lines_pivot">
+        <field name="name">sprogroup.purchase.request.lines.pivot</field>
+        <field name="model">sprogroup.purchase.request.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Purchase Request Lines">
+                <field name="product_id"/>
+                <!--<field name="name"/>-->
+                <field name="product_qty"/>
+                <field name="subtotal"/>
+                <field name="forecast_payment"/>
+                <field name="p_date_request"/>
+                <field name="p_date_order"/>
+                <field name="p_start_up"/>
+                <field name="date_required"/>
+                <field name="p_date_payment"/>
+                <field name="cancelled" invisible="1"/>
+                <field name="is_editable" invisible="1"/>
+            </pivot>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_sprogroup_purchase_request_lines_tree">
+        <field name="name">sprogroup.purchase.request.lines.tree</field>
+        <field name="model">sprogroup.purchase.request.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code_project"/>
+                <field name="adq_title"/>
+                <field name="product_id"/>
+                <field name="product_qty" string="Cantidad"/>
+                <field name="subtotal" string="Subtotal"/>
+                <field name="forecast_payment"/>
+                <field name="p_date_request"/>
+                <field name="p_date_order"/>
+                <field name="p_start_up"/>
+                <field name="date_required"/>
+                <field name="p_date_payment"/>
+                <field name="cancelled" invisible="1"/>
+                <field name="is_editable" invisible="1"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="sprogroup_purchase_request_lines_action" model="ir.actions.act_window">
+        <field name="name">Planificación</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sprogroup.purchase.request.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot,tree,form</field>
+        <field name="context">{"search_default_requested_by":uid}</field>
+        <field name="search_view_id" eval="False"/> <!-- Force empty -->
+        <field name="view_id" eval="False"/> <!-- Force empty -->
+    </record>
+    <record id="action_new_purchase_request_tree" model="ir.actions.act_window.view">     
+        <field eval="1" name="sequence"/>  
+        <field name="view_mode">tree</field>  
+        <field name="view_id" ref="view_sprogroup_purchase_request_lines_tree"/>
+        <field name="act_window_id" ref="sprogroup_purchase_request_lines_action"/>
+    </record>
+
+    <menuitem id="menu_purchase_monitoring" name="Seguimientos" parent="purchase.menu_purchase_root" sequence="3"/>
+    <menuitem
+        id="menu_sprogroup_purchase_request_lines"
+        sequence="-5"
+        parent="menu_purchase_monitoring"
+        action="sprogroup_purchase_request_lines_action"
+        />
+    <!-- FIN -->
+
+    <record model="ir.ui.view" id="purchase_order_form">
+        <field name="name">sprogroup_purchase_request.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="adq_type" string="Tipo de Adquisición"/>
+                <field name="id_pa"/>
+                <field name="code_pa"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="code_project"/>
+            </xpath>
+        </field>
+    </record>
+
+  <record model="ir.ui.view" id="purchase_order_tree">
+    <field name="name">purchase_discount.purchase.order.tree</field>
+    <field name="model">purchase.order</field>
+    <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='partner_id']" position="after">
+        <field name="code_project"/>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

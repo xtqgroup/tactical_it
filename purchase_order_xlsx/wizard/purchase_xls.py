@@ -553,7 +553,7 @@ class WizardWizards(models.Model):
                               
         filename = ('Reporte de Compras'+ '.xls')
         workbook.save(filename)
-        #UNICO COMENTARIO EN EL REMOTO
+        #COMENTARIO 1
         fp = open(filename, "rb")
         file_data = fp.read()
         out = base64.encodestring(file_data) 

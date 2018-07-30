@@ -16,6 +16,8 @@
     "data": [
         "views/purchase_discount_view.xml",
         "views/report_purchaseorder.xml",
+        "security/purchase_discount_security.xml",
+        "security/ir.model.access.csv",
     ],
     "license": 'AGPL-3',
     'installable': True,

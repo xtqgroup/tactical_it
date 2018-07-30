@@ -70,11 +70,7 @@ class ResPartner(models.Model):
     status_partner = fields.Many2many('status.partner', string='Estado proveedor', size=20)
     description_partner = fields.Html(string='Description')
     catalog = fields.Char('Catalogo', size=200, store=True)
-<<<<<<< HEAD
-    #date_evaluation = fields.Date('Fecha Evaluacion Final', size=20, store=True)
-=======
     date_evaluation = fields.Date('Fecha Evaluacion Final', size=20, store=True)
->>>>>>> remotes/origin/beta_v11
     eva = fields.Integer('Resultado Evaluacion', size=3, store=True)
     #criticality = fields.Many2one(comodel_name='criticality.partner', string='Criticidad', size=20, delegate=True)#, selection='_get_selection')
     

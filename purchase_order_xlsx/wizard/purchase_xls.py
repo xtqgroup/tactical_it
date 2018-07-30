@@ -147,11 +147,8 @@ class WizardWizards(models.Model):
         data = base64.b64encode(bytes(output.getvalue(),"utf-8"))
                               
         filename = ('Reporte de Compras'+ '.xls')
-<<<<<<< HEAD
-        #workbook.save(filename)
-=======
+
         workbook.save(filename)
->>>>>>> remotes/origin/beta_v11
         fp = open(filename, "rb")
         file_data = fp.read()
         out = base64.encodestring(file_data)                                                 
@@ -557,18 +554,12 @@ class WizardWizards(models.Model):
                               
         filename = ('Reporte de Compras'+ '.xls')
         workbook.save(filename)
-<<<<<<< HEAD
-        fp = open(filename, "rb")
-        file_data = fp.read()
-        out = base64.encodestring(file_data) 
-    
-=======
+
         #COMENTARIO 1
         fp = open(filename, "rb")
         file_data = fp.read()
         out = base64.encodestring(file_data) 
 
->>>>>>> remotes/origin/beta_v11
 # Files actions         
         attach_vals = {
                 'purchase_data': 'Reporte Compras'+ '.xls',

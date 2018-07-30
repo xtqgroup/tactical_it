@@ -31,9 +31,10 @@ class ProductTemplate(models.Model):
 
     @api.model
     def default_get(self, fields_list):
-        res = super(ProductTemplate, self).default_get(fields_list)
-        product = self.env['product.template'].search([('name', '=', self.name)], limit=1)
-        res.update({'code_sequence': len(self._context.get('product_template_ids', [])) + 1})
+        res = 5
+#        res = super(ProductTemplate, self).default_get(fields_list)
+#        product = self.env['product.template'].search([('name', '=', self.name)], limit=1)
+#        res.update({'code_sequence': len(self._context.get('product_template_ids', [])) + 1})
         return res
 
     @api.depends('code_sequence', 'categ_id.code_final')

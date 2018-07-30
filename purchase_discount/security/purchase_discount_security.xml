@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2016 Eficent Business and IT Consulting Services S.L.
+     License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl-3.0) -->
+<odoo>
+<data noupdate="0">
+
+    <record model="ir.module.category" id="module_category_purchase_discount">
+        <field name="name">Purchase Discount</field>
+        <field name="parent_id" ref="base.module_category_purchase_management"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_purchase_discount_user" model="res.groups">
+        <field name="name">Purchase Discount User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_discount"/>
+    </record>
+
+    <record id="group_sprogroup_purchase_request_manager" model="res.groups">
+        <field name="name">Purchase Discount Manager</field>
+        <field name="implied_ids" eval="[(4, ref('purchase_discount.group_purchase_discount_user'))]"/>
+        <field name="category_id" ref="module_category_purchase_discount"/>
+    </record>
+
+</data>
+<data noupdate="0">
+
+</data>
+</odoo>
